@@ -18,7 +18,7 @@ const Flag = ({code}: {code: string}) => {
 }
 
 function App() {
-  const {m} = useI18n()
+  const {m, setLang, currentLang} = useI18n()
   return (
     <Box component="main" sx={{
       mx: 'auto',
@@ -35,16 +35,33 @@ function App() {
       }}>
         <Form formOutcome={formOutcome(m)} formArea={formArea(m)}/>
       </Box>
+      
       <Box component="footer" sx={{
-        mt: 3,
+        borderTop: t => `1px solid ${t.palette.divider}`,
+        pt: 3,
+        mt: 7,
         color: t => t.palette.text.disabled
       }}>
         <Grid container alignItems="center" justifyContent={'space-between'}>
           <Grid sm={6} item sx={{my: 1}}>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Grid>
           <Grid sm={6} item sx={{display: 'flex'}}>
-            <ScRadioGroup inline dense sx={{whiteSpace: 'nowrap', marginLeft: 'auto', color: t => t.palette.text.secondary}}>
-              <ScRadioGroupItem sx={{height: 37}} value="en" title={<Box sx={{display: 'flex', alignItems: 'center'}}><Flag code="GB"/>&nbsp;&nbsp;English</Box>}/>
-              <ScRadioGroupItem sx={{height: 37}} value="ua" title={<Box sx={{display: 'flex', alignItems: 'center'}}><Flag code="UA"/>&nbsp;&nbsp;Українська</Box>}/>
+            <ScRadioGroup onChange={setLang} value={currentLang} inline dense sx={{whiteSpace: 'nowrap', marginLeft: 'auto', color: t => t.palette.text.secondary}}>
+              <ScRadioGroupItem
+                sx={{height: 37}}
+                value="en"
+                title={
+                  <Box sx={{display: 'flex', alignItems: 'center'}}>
+                    <Flag code="GB"/>&nbsp;&nbsp;English
+                  </Box>
+                }/>
+              <ScRadioGroupItem
+                sx={{height: 37}}
+                value="ua"
+                title={
+                  <Box sx={{display: 'flex', alignItems: 'center'}}>
+                    <Flag code="UA"/>&nbsp;&nbsp;Українська
+                  </Box>
+                }/>
             </ScRadioGroup>
           </Grid>
         </Grid>

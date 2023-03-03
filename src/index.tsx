@@ -33,7 +33,7 @@ const init = async (conf: AppConfig) => {
   })
 }
 
-init(appConfig)
+// init(appConfig)
 
 root.render(
   <React.StrictMode>

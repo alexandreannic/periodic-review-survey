@@ -1,4 +1,4 @@
-import {Messages} from '../core/i18n/localization/fr'
+import {Messages} from '../core/i18n/localization/en'
 import {Enum} from '@alexandreannic/ts-utils'
 
 export interface IFormOutcome {

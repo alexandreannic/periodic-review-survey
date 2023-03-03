@@ -132,7 +132,7 @@ export const muiTheme = (dark?: boolean): Theme => {
             boxSizing: 'border-box',
           },
           ul: {
-            marginTop: '.5em',
+            marginTop: '.5em',            
           },
           h1: baseTheme.typography.h4,
           h2: {
@@ -156,6 +156,7 @@ export const muiTheme = (dark?: boolean): Theme => {
       MuiButton: {
         styleOverrides: {
           root: {
+            fontWeight: 'bold',
             borderRadius: 20,
           },
           outlinedPrimary: {

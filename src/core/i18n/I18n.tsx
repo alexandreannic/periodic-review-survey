@@ -1,29 +1,33 @@
 import * as React from 'react'
-import {ReactNode, useContext, useMemo} from 'react'
-import {fr} from './localization/fr'
+import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
+import {en} from './localization/en'
+import {ua} from './localization/ua'
 
 const I18nContext = React.createContext({})
 
-export enum AppLangs {
-  fr = 'fr',
+export const appLangs = {
+  ua,
+  en
 }
 
-export type AppLang = keyof typeof AppLangs
+export type AppLang = keyof typeof appLangs
 
 interface Props {
-  readonly lang?: AppLang
+  readonly defaultLang?: AppLang
   children: ReactNode
 }
 
 export interface I18nContextProps {
-  m: typeof fr['messages']
+  currentLang: AppLang
+  setLang: (_: AppLang) => void
+  m: typeof en['messages']
   availableLangs: AppLang[]
-  formatLargeNumber: typeof fr['formatLargeNumber']
-  formatDuration: typeof fr['formatDuration']
-  formatDate: typeof fr['formatDate']
-  dateFromNow: typeof fr['dateFromNow']
-  formatTime: typeof fr['formatTime']
-  formatDateTime: typeof fr['formatDateTime']
+  formatLargeNumber: typeof en['formatLargeNumber']
+  formatDuration: typeof en['formatDuration']
+  formatDate: typeof en['formatDate']
+  dateFromNow: typeof en['dateFromNow']
+  formatTime: typeof en['formatTime']
+  formatDateTime: typeof en['formatDateTime']
 }
 
 export const useI18n = (): I18nContextProps => {
@@ -33,20 +37,28 @@ export const useI18n = (): I18nContextProps => {
 export const withI18n = (Component: any) => (props: any) =>
   <I18nContext.Consumer>{(other: any) => <Component {...props} {...other} />}</I18nContext.Consumer>
 
-export const I18nProvider = ({children, lang = AppLangs.fr}: Props) => {
-  const {messages: m, ...others}: typeof fr = useMemo(() => {
+export const I18nProvider = ({children, defaultLang = 'en'}: Props) => {
+  const [lang, setLang] = useState<AppLang>()
+  
+  useEffect(() => {
+    setLang(defaultLang)
+  }, [defaultLang])
+  
+  const {messages: m, ...others}: typeof en = useMemo(() => {
     switch (lang) {
-      case AppLangs.fr:
-        return fr
+      case 'ua':
+        return en
       default:
-        return fr
+        return en
     }
   }, [lang])
 
   return (
     <I18nContext.Provider
       value={{
-        availableLangs: Object.keys(AppLangs),
+        currentLang: lang,
+        setLang,
+        availableLangs: Object.keys(appLangs),
         m,
         ...others,
       }}
