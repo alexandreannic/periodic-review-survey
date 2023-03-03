@@ -4,8 +4,8 @@ import {Txt} from '../shared/Txt/Txt'
 import {ScRadioGroup, ScRadioGroupItem} from '../shared/RadioGroup'
 import {StepperActions} from '../shared/Stepper/StepperActions'
 import {useStepperContext} from '../shared/Stepper/Stepper'
-import {Animate} from '../shared/Animate'
 import {QuestionTitle} from './QuestionTitle'
+import {Animate} from 'shared/Animate'
 
 export const QuestionOutcome = ({
   title,
@@ -13,8 +13,8 @@ export const QuestionOutcome = ({
   value,
   onChange,
 }: {
-  value?: string,
-  onChange: (_: string) => void
+  value?: string[],
+  onChange: (_: string[]) => void
   title: string
   q: IQuestion
 }) => {
@@ -35,12 +35,21 @@ export const QuestionOutcome = ({
             }}>
               {option.desc}
             </Box>
-            <ScRadioGroup sx={{my: 1}} multiple dense>
+            <ScRadioGroup<string>
+              sx={{my: 1}}
+              value={value}
+              multiple
+              dense
+              onChange={_ => {
+                onChange(_)
+              }}
+            >
               {option.subOptions.map(sub =>
                 <ScRadioGroupItem
+                  disabled={value ? value.length === 3 && !value.includes(sub.id) : false}
                   value={sub.id}
-                  title={sub.desc}
-                  // description={sub.desc}
+                  title={sub.title}
+                  description={sub.desc}
                 />
               )}
             </ScRadioGroup>

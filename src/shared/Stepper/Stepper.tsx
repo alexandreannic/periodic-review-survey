@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
+import React, {ReactNode, useCallback, useContext, useEffect, useMemo, useState} from 'react'
 import {StepperHeader} from './StepperHeader'
 
 export interface StepProps {
@@ -8,7 +8,6 @@ export interface StepProps {
 }
 
 interface StepperProps {
-  header?: ReactNode
   renderDone?: ReactNode
   steps: StepProps[]
   initialStep?: number
@@ -27,7 +26,6 @@ export const StepperContext = React.createContext<StepperContext>({
 } as StepperContext)
 
 export const Stepper = React.memo(({
-  header,
   steps,
   initialStep,
   renderDone,
@@ -42,33 +40,31 @@ export const Stepper = React.memo(({
     onStepChange?.(steps[currentStep], currentStep)
   }, [currentStep])
 
+  const goTo = useCallback((i: number) => {
+    if (isDone) return
+    setCurrentStep(_ => Math.max(Math.min(i, maxStep), 0))
+    scrollTop()
+  }, [])
+  const next = useCallback(() => {
+    if (isDone) return
+    setCurrentStep(_ => Math.min(_ + 1, maxStep))
+    scrollTop()
+  }, [])
+  const prev = useCallback(() => {
+    if (isDone) return
+    setCurrentStep(_ => Math.max(_ - 1, 0))
+    scrollTop()
+  }, [])
+
   return (
     <StepperContext.Provider value={{
       currentStep,
-      goTo: (i: number) => {
-        if (isDone) return
-        setCurrentStep(_ => Math.max(Math.min(i, maxStep), 0))
-        scrollTop()
-      },
-      next: () => {
-        if (isDone) return
-        setCurrentStep(_ => Math.min(_ + 1, maxStep))
-        scrollTop()
-      },
-      prev: () => {
-        if (isDone) return
-        setCurrentStep(_ => Math.max(_ - 1, 0))
-        scrollTop()
-      },
+      goTo,
+      next,
+      prev,
     }}>
       <StepperHeader steps={steps.map(_ => _.label)} currentStep={currentStep} goTo={setCurrentStep}/>
-      {header}
-      {(() => {
-        const Step: any = currentStep > (steps.length - 1) ? renderDone : steps[currentStep].component
-        return (
-          <Step/>
-        )
-      })()}
+      {currentStep > (steps.length - 1) ? renderDone : steps[currentStep].component()}
     </StepperContext.Provider>
   )
 })

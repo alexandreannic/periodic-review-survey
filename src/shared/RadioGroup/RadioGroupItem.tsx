@@ -76,10 +76,13 @@ export const ScRadioGroupItem = <T, >({
             marginTop: '-2px',
           },
         },
-        '&:hover': {
+        '&:hover': disabled ? {} : {
           zIndex: 1,
           border: t => `1px solid ${t.palette.primary.main}`,
           background: 'rgba(0,0,0,.04)',
+        },
+        ...disabled && {
+          opacity: .8,
         },
         ...selected && {
           zIndex: 1,

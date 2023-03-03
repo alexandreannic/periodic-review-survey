@@ -6,9 +6,9 @@ import {useState} from 'react'
 
 interface FormAnswer {
   area?: string
-  now?: string
-  oneYear?: string
-  end?: string
+  now?: string[]
+  oneYear?: string[]
+  end?: string[]
 }
 
 export const Form = ({
@@ -39,6 +39,7 @@ export const Form = ({
               <QuestionOutcome
                 q={q}
                 title={formOutcome.label}
+                value={(state as any)[q.id]}
                 onChange={_ => setState(prev => ({...prev, [q.id]: _}))}
               />
           }))

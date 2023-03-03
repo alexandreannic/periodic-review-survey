@@ -5,6 +5,18 @@ import {formArea, formOutcome} from './Form/formData'
 import {useI18n} from './core/i18n'
 import {ScRadioGroup, ScRadioGroupItem} from './shared/RadioGroup'
 
+const Flag = ({code}: {code: string}) => {
+  return (
+    <img
+      loading="lazy"
+      width="20"
+      src={`https://flagcdn.com/w20/${code.toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/w40/${code.toLowerCase()}.png 2x`}
+      alt=""
+    />
+  )
+}
+
 function App() {
   const {m} = useI18n()
   return (
@@ -14,7 +26,7 @@ function App() {
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
-      pt: 2,
+      pt: 3,
       pb: 2,
       px: 2,
     }}>
@@ -31,8 +43,8 @@ function App() {
           <Grid sm={6} item sx={{my: 1}}>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Grid>
           <Grid sm={6} item sx={{display: 'flex'}}>
             <ScRadioGroup inline dense sx={{whiteSpace: 'nowrap', marginLeft: 'auto', color: t => t.palette.text.secondary}}>
-              <ScRadioGroupItem sx={{height: 37}} value="en" title="🇬🇧 English"/>
-              <ScRadioGroupItem sx={{height: 37}} value="uk" title="🇺🇦 Українська"/>
+              <ScRadioGroupItem sx={{height: 37}} value="en" title={<Box sx={{display: 'flex', alignItems: 'center'}}><Flag code="GB"/>&nbsp;&nbsp;English</Box>}/>
+              <ScRadioGroupItem sx={{height: 37}} value="ua" title={<Box sx={{display: 'flex', alignItems: 'center'}}><Flag code="UA"/>&nbsp;&nbsp;Українська</Box>}/>
             </ScRadioGroup>
           </Grid>
         </Grid>
