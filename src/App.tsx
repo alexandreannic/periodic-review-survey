@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import {Box} from '@mui/material'
+import {Form} from './Form/Form'
+import {formArea, formOutcome} from './Form/formData'
+import {useI18n} from './core/i18n'
 
 function App() {
+  const {m} = useI18n()
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Box sx={{
+      mt: 2,
+      mb: 3,
+      mx: 'auto',
+      maxWidth: 680,
+    }}>
+      <Form formOutcome={formOutcome(m)} formArea={formArea(m)}/>
+    </Box>
+  )
 }
 
 export default App;
