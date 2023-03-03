@@ -4,14 +4,13 @@
 
 export const appConfig = {
   firebase: {
-    apiKey: 'AIzaSyDMfHcA-vtjpmQ-qffh9zlyJu3Q-aLG-7Q',
-    authDomain: 'drc-ukr-periodic-review.firebaseapp.com',
-    projectId: 'drc-ukr-periodic-review',
-    storageBucket: 'drc-ukr-periodic-review.appspot.com',
-    messagingSenderId: '601632493070',
-    appId: '1:601632493070:web:8d2222bf698c91d00bb65f',
-    measurementId: 'G-BS00YJ4P8S',
-    databaseURL: 'https://drc-ukr-periodic-review-default-rtdb.europe-west1.firebasedatabase.app/',
+    apiKey: 'AIzaSyA1WvKZsi9MnlcNeBuOfoNe8EUjYeR2q_M',
+    authDomain: 'drc-periodic-review.firebaseapp.com',
+    databaseURL: 'https://drc-periodic-review-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'drc-periodic-review',
+    storageBucket: 'drc-periodic-review.appspot.com',
+    messagingSenderId: '187381650480',
+    appId: '1:187381650480:web:c9c5422e23cfa9909bc9f5'
   }
 }
 

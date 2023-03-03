@@ -30,6 +30,7 @@ export const ScRadioGroupItem = <T, >({
   onClick,
   className,
   multiple,
+  sx,
   ...rest
 }: ScRadioGroupItemProps<T>) => {
   const minHeight = dense ? 40 : 50
@@ -37,6 +38,7 @@ export const ScRadioGroupItem = <T, >({
     <Box
       role={multiple ? 'checkbox' : 'radio'}
       sx={{
+        ...sx,
         minHeight,
         display: 'flex',
         alignItems: 'flex-start',
