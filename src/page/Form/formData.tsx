@@ -1,10 +1,10 @@
-import {Messages} from '../core/i18n/localization/en'
+import {en, Messages} from '../../core/i18n/localization/en'
 import {Enum} from '@alexandreannic/ts-utils'
 
 export interface IFormOutcome {
   readonly label: string
   readonly questions: {
-    readonly id: string
+    readonly id: keyof Messages['formQuestions']
     readonly label: string
     readonly options: {
       readonly id: string
@@ -44,6 +44,8 @@ const options = (m: Messages): IOption[] => [
   },
 ]
 
+export type Area = keyof Messages['areas']
+
 export const formOutcome = (m: Messages): IFormOutcome => ({
   label: m.formTitle,
   questions: Enum.keys(m.formQuestions).map(q => ({
@@ -53,19 +55,16 @@ export const formOutcome = (m: Messages): IFormOutcome => ({
   }))
 })
 
-export const area = (m: Messages) => [
-  m.north,
-  m.east,
-  m.south,
-  m.west,
-]
+export const area = (m: Messages) => Object.values(m.area)
 
 export interface IFormArea {
   label: string
   options: string[]
 }
 
-export const formArea = (m: Messages): IFormArea => ({
-  label: m.questionArea,
-  options: area(m),
-})
+export const formArea = Object.keys(en.messages.area)
+
+// export const formArea = (m: Messages): IFormArea => ({
+//   label: m.questionArea,
+//   options: area(m),
+// })

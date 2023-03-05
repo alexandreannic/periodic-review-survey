@@ -7,6 +7,7 @@ export const appConfig = {
     apiKey: 'AIzaSyA1WvKZsi9MnlcNeBuOfoNe8EUjYeR2q_M',
     authDomain: 'drc-periodic-review.firebaseapp.com',
     databaseURL: 'https://drc-periodic-review-default-rtdb.europe-west1.firebasedatabase.app',
+    // databaseURL: 'https://drc-ukr-periodic-review-default-rtdb.europe-west1.firebasedatabase.app',
     projectId: 'drc-periodic-review',
     storageBucket: 'drc-periodic-review.appspot.com',
     messagingSenderId: '187381650480',

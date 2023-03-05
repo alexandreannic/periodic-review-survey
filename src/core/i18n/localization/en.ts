@@ -41,8 +41,11 @@ export const en = Object.freeze({
   formatDuration,
   formatLargeNumber,
   messages: {
-    // signalconsoCatchWord: `Signaler un problème à <b>l&apos;entreprise</b> <br/> en toute transparence avec <b>la répression des fraudes</b> !`,
-    // signalconsoCatchWord: `Signaler un problème à l&apos;entreprise<br/> en toute transparence avec la répression des fraudes !`,
+    area: `Area',`
+    noDataAtm: 'No data at the moment',
+    seeResults: `See results`,
+    select3Outcomes: `Please, select 3 outcomes`,
+    somethingWentWrong: 'Something went wrong',
     yes: 'Yes',
     no: 'No',
     previous: 'Previous',
@@ -66,6 +69,7 @@ export const en = Object.freeze({
         bt1_outcomeArea5: {title: 'Outcome Area 5', desc: 'People can effectively leverage systems to fulfil their rights'},
       }
     },
+    formSubmitted: 'Answers successfully submitted',
     breakthrough2: {
       title: 'Breakthrough 2',
       desc: 'On a par with others, people affected by conflict and displacement must be able to pursue self-reliance',
@@ -78,9 +82,11 @@ export const en = Object.freeze({
       },
     },
     questionArea: 'In which area are you working ?',
-    north: 'North',
-    east: 'East',
-    south: 'South',
-    west: 'West'
+    area: {
+      north: 'North',
+      east: 'East',
+      south: 'South',
+      west: 'West'
+    }
   },
 })

@@ -3,11 +3,13 @@ import {useI18n} from 'core/i18n'
 import {Btn} from '../Btn/Btn'
 import {useStepperContext} from './Stepper'
 import {StepperActionsNext} from './StepperActionsNext'
+import {useToast} from 'mui-extension'
 
 interface Props {
   hideNext?: boolean
   hidePrev?: boolean
   loadingNext?: boolean
+  disableNext?: boolean
   loadingPrev?: boolean
   nextButtonLabel?: string
   nextIcon?: string,
@@ -15,7 +17,17 @@ interface Props {
   prev?: (prev: () => void) => void
 }
 
-export const StepperActions = ({nextButtonLabel, nextIcon, hidePrev, hideNext, loadingNext, loadingPrev, next, prev}: Props) => {
+export const StepperActions = ({
+  disableNext,
+  nextButtonLabel,
+  nextIcon,
+  hidePrev,
+  hideNext,
+  loadingNext,
+  loadingPrev,
+  next,
+  prev
+}: Props) => {
   const {m} = useI18n()
   const _stepper = useStepperContext()
   return (
@@ -27,6 +39,7 @@ export const StepperActions = ({nextButtonLabel, nextIcon, hidePrev, hideNext, l
       )}
       {!hideNext && (
         <StepperActionsNext
+          disabled={disableNext}
           icon={nextIcon}
           loading={loadingNext}
           sx={{marginLeft: 'auto'}}

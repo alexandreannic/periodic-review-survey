@@ -2,20 +2,7 @@ import * as React from 'react'
 import {ReactNode, useContext, useEffect, useMemo, useState} from 'react'
 import {en} from './localization/en'
 import {ua} from './localization/ua'
-
-const I18nContext = React.createContext({})
-
-export const appLangs = {
-  ua,
-  en
-}
-
-export type AppLang = keyof typeof appLangs
-
-interface Props {
-  readonly defaultLang?: AppLang
-  children: ReactNode
-}
+import {Enum} from '@alexandreannic/ts-utils'
 
 export interface I18nContextProps {
   currentLang: AppLang
@@ -30,20 +17,33 @@ export interface I18nContextProps {
   formatDateTime: typeof en['formatDateTime']
 }
 
-export const useI18n = (): I18nContextProps => {
-  return useContext<I18nContextProps>(I18nContext as any)
+export const appLangs = {
+  ua,
+  en
 }
+
+export type AppLang = keyof typeof appLangs
+
+const I18nContext = React.createContext<I18nContextProps>({} as any)
+
+export const useI18n = () => useContext<I18nContextProps>(I18nContext as any)
 
 export const withI18n = (Component: any) => (props: any) =>
   <I18nContext.Consumer>{(other: any) => <Component {...props} {...other} />}</I18nContext.Consumer>
 
-export const I18nProvider = ({children, defaultLang = 'en'}: Props) => {
-  const [lang, setLang] = useState<AppLang>()
-  
+export const I18nProvider = ({
+  children,
+  defaultLang = 'en'
+}: {
+  readonly defaultLang?: AppLang
+  children: ReactNode
+}) => {
+  const [lang, setLang] = useState<AppLang>(defaultLang)
+
   useEffect(() => {
     setLang(defaultLang)
   }, [defaultLang])
-  
+
   const {messages: m, ...others}: typeof en = useMemo(() => {
     switch (lang) {
       case 'ua':
@@ -58,7 +58,7 @@ export const I18nProvider = ({children, defaultLang = 'en'}: Props) => {
       value={{
         currentLang: lang,
         setLang,
-        availableLangs: Object.keys(appLangs),
+        availableLangs: Enum.keys(appLangs),
         m,
         ...others,
       }}

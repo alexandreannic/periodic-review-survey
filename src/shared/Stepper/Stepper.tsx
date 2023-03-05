@@ -12,6 +12,7 @@ interface StepperProps {
   steps: StepProps[]
   initialStep?: number
   onStepChange?: (props: StepProps, index: number) => void
+  onComplete?: (props: StepProps, index: number) => void
 }
 
 interface StepperContext {
@@ -30,6 +31,7 @@ export const Stepper = React.memo(({
   initialStep,
   renderDone,
   onStepChange,
+  onComplete
 }: StepperProps) => {
   const [currentStep, setCurrentStep] = useState(initialStep ?? 0)
   const maxStep = useMemo(() => steps.length + (renderDone ? 1 : 0), [steps])
@@ -38,10 +40,10 @@ export const Stepper = React.memo(({
 
   useEffect(() => {
     onStepChange?.(steps[currentStep], currentStep)
+    if(currentStep === steps.length) onComplete?.(steps[currentStep], currentStep)
   }, [currentStep])
 
   const goTo = useCallback((i: number) => {
-    if (isDone) return
     setCurrentStep(_ => Math.max(Math.min(i, maxStep), 0))
     scrollTop()
   }, [])
@@ -51,7 +53,6 @@ export const Stepper = React.memo(({
     scrollTop()
   }, [])
   const prev = useCallback(() => {
-    if (isDone) return
     setCurrentStep(_ => Math.max(_ - 1, 0))
     scrollTop()
   }, [])

@@ -1,9 +1,10 @@
 import React from 'react'
 import {Box, Grid} from '@mui/material'
-import {Form} from './Form/Form'
-import {formArea, formOutcome} from './Form/formData'
 import {useI18n} from './core/i18n'
 import {ScRadioGroup, ScRadioGroupItem} from './shared/RadioGroup'
+import {Router} from './page/Router'
+import {Txt} from 'mui-extension'
+import {NavLink} from 'react-router-dom'
 
 const Flag = ({code}: {code: string}) => {
   return (
@@ -33,7 +34,7 @@ function App() {
       <Box sx={{
         flex: 1,
       }}>
-        <Form formOutcome={formOutcome(m)} formArea={formArea(m)}/>
+        <Router/>
       </Box>
       
       <Box component="footer" sx={{
@@ -43,7 +44,12 @@ function App() {
         color: t => t.palette.text.disabled
       }}>
         <Grid container alignItems="center" justifyContent={'space-between'}>
-          <Grid sm={6} item sx={{my: 1}}>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Grid>
+          <Grid sm={6} item sx={{my: 1}}>
+            <Txt block>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Txt>
+            <NavLink to="/dashboard"><Txt link>{m.seeResults}</Txt></NavLink>
+            &nbsp;•&nbsp;
+            <NavLink to="/"><Txt link>Home</Txt></NavLink>
+          </Grid>
           <Grid sm={6} item sx={{display: 'flex'}}>
             <ScRadioGroup onChange={setLang} value={currentLang} inline dense sx={{whiteSpace: 'nowrap', marginLeft: 'auto', color: t => t.palette.text.secondary}}>
               <ScRadioGroupItem

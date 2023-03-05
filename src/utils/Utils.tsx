@@ -1,5 +1,3 @@
-export const countryToFlag = (isoCode: string) => {
-  return typeof String.fromCodePoint !== 'undefined'
-    ? isoCode.toUpperCase().replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397))
-    : isoCode
-}
+export const generateId = () => ('' + Math.random()).split('.')[1]
+
+export type ValueOf<T> = T[keyof T];

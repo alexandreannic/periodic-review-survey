@@ -10,6 +10,11 @@ import {Provide} from './core/Provide'
 import {CssBaseline, ThemeProvider} from '@mui/material'
 import {muiTheme} from './core/theme'
 import {I18nProvider} from './core/i18n'
+import {StoreProvider} from './core/context/StoreContext'
+import {ToastProvider} from 'mui-extension'
+import {FirebaseDb} from './core/firebaseDb/FirebaseDb'
+import {FirebaseDbProvider} from './core/firebaseDb/FirebaseDbContext'
+import {BrowserRouter} from 'react-router-dom'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -33,18 +38,21 @@ const init = async (conf: AppConfig) => {
   })
 }
 
-// init(appConfig)
+const firebaseDb = new FirebaseDb(appConfig)
+
 
 root.render(
-  <React.StrictMode>
-    <Provide providers={[
-      _ => <ThemeProvider theme={muiTheme()} children={_}/>,
-      _ => <CssBaseline children={_}/>,
-      _ => <I18nProvider children={_}/>,
-    ]}>
-      <App/>
-    </Provide>
-  </React.StrictMode>
+  <Provide providers={[
+    _ => <ThemeProvider theme={muiTheme()} children={_}/>,
+    _ => <CssBaseline children={_}/>,
+    _ => <I18nProvider children={_}/>,
+    _ => <StoreProvider children={_}/>,
+    _ => <ToastProvider children={_}/>,
+    _ => <FirebaseDbProvider children={_} db={firebaseDb}/>,
+    _ => <BrowserRouter children={_}/>
+  ]}>
+    <App/>
+  </Provide>
 )
 
 // If you want to start measuring performance in your app, pass a function
