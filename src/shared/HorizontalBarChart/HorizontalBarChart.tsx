@@ -23,7 +23,6 @@ interface Props {
 const sx = makeSx({
   item: {
     display: 'flex',
-    my: 0.5,
     mx: 0,
   },
   label: {
@@ -40,7 +39,7 @@ export const HorizontalBarChart = ({
   data,
   grid,
   labelWidth = 200,
-  barHeight = 4
+  barHeight = 5
 }: Props) => {
   const {m} = useI18n()
   const maxValue = useMemo(() => data && Math.max(...data.map(_ => _.value)), [data])
@@ -63,7 +62,15 @@ export const HorizontalBarChart = ({
           return (
             <Box key={i} sx={sx.item}>
               <Box sx={sx.label} style={{width: labelWidth, minWidth: labelWidth}}>
-                {item.label}
+                <Box>{item.label}</Box>
+                
+                <Box sx={{display: 'flex', marginLeft: 'auto'}}>
+                  <Txt color="hint" sx={{mr: 2}}>{percentOfMax.toFixed(1)}%</Txt>
+                  <Box sx={{
+                    color: t => t.palette.primary.main,
+                    fontWeight: t => t.typography.fontWeightBold,
+                  }}>{formatLargeNumber(item.value)}</Box>
+                </Box>
               </Box>
               <LightTooltip
                 open={item.disabled ? false : undefined}
@@ -72,7 +79,7 @@ export const HorizontalBarChart = ({
                     <Txt size="big" block bold>
                       {item.label}
                     </Txt>
-                    <div style={{textAlign: 'right'}}>
+                    <div>
                       <Txt size="title" color="primary" block>
                         {formatLargeNumber(item.value)}
                       </Txt>
@@ -98,8 +105,6 @@ export const HorizontalBarChart = ({
                 >
                   <Box
                     sx={{
-                      // fontSize: t => styleUtils(t).fontSize.small,
-                      fontWeight: t => t.typography.fontWeightBold,
                       transition: t => t.transitions.create('width', {duration: 1000}),
                       width: 0,
                       display: 'flex',
@@ -107,12 +112,9 @@ export const HorizontalBarChart = ({
                       justifyContent: 'flex-end',
                       minHeight: 24,
                       borderBottom: t => `${barHeight}px solid ${t.palette.primary.main}`,
-                      color: t => t.palette.primary.main,
                     }}
                     style={{width: appeared ? `calc(${percentOfMax * 0.9}%)` : 0, color: item.color, borderColor: item.color}}
-                  >
-                    {percentOfMax > 5 && <div>{formatLargeNumber(item.value)}</div>}
-                  </Box>
+                  />
                 </Box>
               </LightTooltip>
             </Box>

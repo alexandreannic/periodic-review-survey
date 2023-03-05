@@ -10,6 +10,7 @@ import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {Enum} from '@alexandreannic/ts-utils'
 import {Messages} from '../../core/i18n/localization/en'
+import {Layout} from '../../shared/Layout/Layout'
 
 export type AllBreakthroughOptions = keyof Messages['formOutcome']['breakthrough']['breakthrough2']['options'] | keyof Messages['formOutcome']['breakthrough']['breakthrough1']['options']
 
@@ -31,41 +32,42 @@ export const Form = () => {
     toastError(m.somethingWentWrong)
   })
 
-  console.warn(_store.get.answers)
   return (
-    <Stepper
-      renderDone={
-        <FormCompleted
-          formAnswers={_store.get.answers}
-          onConfirm={async () => {
-            await _db.save.call(_store.get.answers)
-            _store.set({submitted: true})
-            toastSuccess(m.formSubmitted)
-          }}
-        />
-      }
-      initialStep={_store.get.submitted ? 4 : 0}
-      steps={[
-        {
-          name: 'area',
-          component: () => (
-            <QuestionArea
-              value={_store.get.answers.area}
-              onChange={_ => _store.set({answers: {area: _}})}
-            />
-          )
-        },
-        ...Enum.entries(m.formOutcome.questions).map(([k, v]) => ({
-          name: k,
-          component: () =>
-            <QuestionOutcome
-              key={k}
-              label={v}
-              value={_store.get.answers[k]}
-              onChange={_ => _store.set({answers: {[k]: _}})}
-            />
-        }))
-      ]}
-    />
+    <Layout>
+      <Stepper
+        renderDone={
+          <FormCompleted
+            formAnswers={_store.get.answers}
+            onConfirm={async () => {
+              await _db.save.call(_store.get.answers)
+              _store.set({submitted: true})
+              toastSuccess(m.formSubmitted)
+            }}
+          />
+        }
+        initialStep={_store.get.submitted ? 4 : 0}
+        steps={[
+          {
+            name: 'area',
+            component: () => (
+              <QuestionArea
+                value={_store.get.answers.area}
+                onChange={_ => _store.set({answers: {area: _}})}
+              />
+            )
+          },
+          ...Enum.entries(m.formOutcome.questions).map(([k, v]) => ({
+            name: k,
+            component: () =>
+              <QuestionOutcome
+                key={k}
+                label={v}
+                value={_store.get.answers[k]}
+                onChange={_ => _store.set({answers: {[k]: _}})}
+              />
+          }))
+        ]}
+      />
+    </Layout>
   )
 }
