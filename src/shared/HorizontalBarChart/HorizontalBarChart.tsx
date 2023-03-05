@@ -1,22 +1,23 @@
 import * as React from 'react'
 import {ReactNode, useMemo, useState} from 'react'
-import {alpha, Box, Tooltip, TooltipProps} from '@mui/material'
+import {alpha, Box, styled, Tooltip} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
 import {mapFor} from '@alexandreannic/ts-utils'
 import {makeSx, Txt} from 'mui-extension'
 import {useI18n} from '../../core/i18n'
-import {styleUtils} from '../../core/theme'
 
 export interface HorizontalBarChartData {
   label: ReactNode
   value: number
   color?: string
+  disabled?: boolean
 }
 
 interface Props {
   data?: HorizontalBarChartData[]
   grid?: boolean
-  width?: number
+  labelWidth?: number
+  barHeight?: number
 }
 
 const sx = makeSx({
@@ -35,7 +36,12 @@ const sx = makeSx({
   },
 })
 
-export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
+export const HorizontalBarChart = ({
+  data,
+  grid,
+  labelWidth = 200,
+  barHeight = 4
+}: Props) => {
   const {m} = useI18n()
   const maxValue = useMemo(() => data && Math.max(...data.map(_ => _.value)), [data])
   const sumValue = useMemo(() => data && data.reduce((sum, _) => _.value + sum, 0), [data])
@@ -56,10 +62,11 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
           const percentOfAll = (item.value / sumValue) * 100
           return (
             <Box key={i} sx={sx.item}>
-              <Box sx={sx.label} style={{width: width, minWidth: width}}>
+              <Box sx={sx.label} style={{width: labelWidth, minWidth: labelWidth}}>
                 {item.label}
               </Box>
               <LightTooltip
+                open={item.disabled ? false : undefined}
                 title={
                   <>
                     <Txt size="big" block bold>
@@ -81,15 +88,17 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
                     py: 0.25,
                     px: 0,
                     flex: 1,
-                    transition: t => t.transitions.create('background'),
-                    '&:hover': {
-                      background: t => alpha(t.palette.primary.main, 0.1),
-                    },
+                    ...item.disabled ? {} : {
+                      transition: t => t.transitions.create('background'),
+                      '&:hover': {
+                        background: t => alpha(t.palette.primary.main, 0.1),
+                      },
+                    }
                   }}
                 >
                   <Box
                     sx={{
-                      fontSize: t => styleUtils(t).fontSize.small,
+                      // fontSize: t => styleUtils(t).fontSize.small,
                       fontWeight: t => t.typography.fontWeightBold,
                       transition: t => t.transitions.create('width', {duration: 1000}),
                       width: 0,
@@ -97,7 +106,7 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
                       alignItems: 'center',
                       justifyContent: 'flex-end',
                       minHeight: 24,
-                      borderBottom: t => `4px solid ${t.palette.primary.main}`,
+                      borderBottom: t => `${barHeight}px solid ${t.palette.primary.main}`,
                       color: t => t.palette.primary.main,
                     }}
                     style={{width: appeared ? `calc(${percentOfMax * 0.9}%)` : 0, color: item.color, borderColor: item.color}}
@@ -114,7 +123,7 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
       )}
       {grid && data && data.length > 0 && (
         <Box sx={sx.item}>
-          <Box sx={sx.label} style={{width: width, minWidth: width}} />
+          <Box sx={sx.label} style={{width: labelWidth, minWidth: labelWidth}}/>
           <div style={{position: 'relative', width: '100%'}}>
             {mapFor(gridAxis + 1, i => (
               <Box
@@ -122,7 +131,7 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
                 sx={{
                   width: '1px',
                   height: 1000,
-                  background: t => t.palette.divider,
+                  borderRight: t => `1px dashed ${t.palette.divider}`,
                   position: 'absolute',
                   bottom: 0,
                   right: 0,
@@ -137,11 +146,30 @@ export const HorizontalBarChart = ({data, grid, width = 200}: Props) => {
   )
 }
 
-const LightTooltip = (props: TooltipProps) => {
-  return <Tooltip sx={{
-    backgroundColor: t => t.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
-    boxShadow: t => t.shadows[1],
-    fontSize: 11,
-  }} {...props}/>
-}
+
+const ToBeStyledTooltip = ({className, ...props}: any) => (
+  <Tooltip {...props} classes={{tooltip: className}}/>
+)
+
+const LightTooltip = styled(ToBeStyledTooltip)(({theme}) => ({
+  backgroundColor: theme.palette.common.white,
+  color: 'rgba(0, 0, 0, 0.87)',
+  boxShadow: theme.shadows[1],
+  fontSize: 11,
+}))
+
+// const LightTooltip = styled(({className, ...props}: any) => (
+//   <Tooltip {...props} componentsProps={{tooltip: {className: className}}}/>
+// ))(t => ({
+//   backgroundColor: t.palette.common.white,
+//   color: 'rgba(0, 0, 0, 0.87)',
+//   boxShadow: t.shadows[1],
+//   fontSize: 11,
+// }))
+
+// const LightTooltip = styled(Tooltip)((t: Theme) => ({
+//   backgroundColor: t.palette.common.white,
+//   color: 'rgba(0, 0, 0, 0.87)',
+//   boxShadow: t.shadows[1],
+//   fontSize: 11,
+// }))

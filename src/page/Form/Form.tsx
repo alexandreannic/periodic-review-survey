@@ -1,4 +1,4 @@
-import {Area, IFormArea, IFormOutcome} from './formData'
+import {Area} from './formData'
 import {QuestionOutcome} from './QuestionOutcome'
 import {Stepper} from '../../shared/Stepper/Stepper'
 import {QuestionArea} from './QuestionArea'
@@ -8,22 +8,19 @@ import {useI18n} from '../../core/i18n'
 import {useToast} from 'mui-extension'
 import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
 import {useEffectFn} from '@alexandreannic/react-hooks-lib'
+import {Enum} from '@alexandreannic/ts-utils'
 import {Messages} from '../../core/i18n/localization/en'
+
+export type AllBreakthroughOptions = keyof Messages['formOutcome']['breakthrough']['breakthrough2']['options'] | keyof Messages['formOutcome']['breakthrough']['breakthrough1']['options']
 
 export interface FormAnswer {
   area?: Area
-  now?: string[]
-  oneYear?: string[]
-  end?: string[]
+  now?: AllBreakthroughOptions[]
+  oneYear?: AllBreakthroughOptions[]
+  end?: AllBreakthroughOptions[]
 }
 
-export const Form = ({
-  formOutcome,
-  formArea,
-}: {
-  formOutcome: IFormOutcome
-  formArea: IFormArea
-}) => {
+export const Form = () => {
   const _store = useStoreContext()
   const _db = useFirebaseDbContext()
   const {m} = useI18n()
@@ -54,19 +51,18 @@ export const Form = ({
           component: () => (
             <QuestionArea
               value={_store.get.answers.area}
-              form={formArea}
               onChange={_ => _store.set({answers: {area: _}})}
             />
           )
         },
-        ...formOutcome.questions.map(q => ({
-          name: q.label,
+        ...Enum.entries(m.formOutcome.questions).map(([k, v]) => ({
+          name: k,
           component: () =>
             <QuestionOutcome
-              q={q}
-              title={formOutcome.label}
-              value={_store.get.answers[q.id]}
-              onChange={_ => _store.set({answers: {[q.id]: _}})}
+              key={k}
+              label={v}
+              value={_store.get.answers[k]}
+              onChange={_ => _store.set({answers: {[k]: _}})}
             />
         }))
       ]}

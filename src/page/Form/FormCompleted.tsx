@@ -1,6 +1,5 @@
 import {FormAnswer} from './Form'
 import {Animate} from '../../shared/Animate'
-import {formArea, formOutcome} from './formData'
 import {useI18n} from '../../core/i18n'
 import {Txt} from '../../shared/Txt/Txt'
 import {Alert, Box} from '@mui/material'
@@ -8,6 +7,8 @@ import {QuestionTitle} from './QuestionTitle'
 import {StepperActions} from '../../shared/Stepper/StepperActions'
 import {useStoreContext} from '../../core/context/StoreContext'
 import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
+import {Enum} from '@alexandreannic/ts-utils'
+import {allOutcomeOptions} from './formData'
 
 interface Answer {
   title: string
@@ -57,11 +58,7 @@ export const FormCompleted = ({
   const _db = useFirebaseDbContext()
   const _store = useStoreContext()
   const {m} = useI18n()
-  const allOutcomeOptions = {
-    ...m.breakthrough1.options,
-    ...m.breakthrough2.options,
-  }
-  console.log(allOutcomeOptions)
+  
   const {
     area,
     ...other
@@ -76,17 +73,15 @@ export const FormCompleted = ({
         )}
         <QuestionTitle>{m.yourAnswers}</QuestionTitle>
         <div>
-          <Question question={formArea(m).label} answer={{title: area!}}/>
-          {(formOutcome(m).questions.map(_ => _.id) as (keyof typeof other)[]).map(q => {
-            const answerIds = (other[q] ?? []) as Array<keyof typeof allOutcomeOptions>
-            return (
-              <Question
-                key={q}
-                question={m.formQuestions[q]}
-                answer={answerIds.map(_ => allOutcomeOptions[_])}
-              />
-            )
-          })}
+          <Question question={m.questionArea} answer={{title: area!}}/>
+          <Txt size="big" bold>{m.formOutcome.title}</Txt>
+          {Enum.entries(m.formOutcome.questions).map(([k, v]) =>
+            <Question
+              key={k}
+              question={v}
+              answer={other[k]?.map(_ => allOutcomeOptions(m)[_]) ?? []}
+            />
+          )}
         </div>
         <StepperActions
           loadingNext={_db.save.loading}

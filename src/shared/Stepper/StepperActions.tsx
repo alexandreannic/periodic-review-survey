@@ -3,7 +3,6 @@ import {useI18n} from 'core/i18n'
 import {Btn} from '../Btn/Btn'
 import {useStepperContext} from './Stepper'
 import {StepperActionsNext} from './StepperActionsNext'
-import {useToast} from 'mui-extension'
 
 interface Props {
   hideNext?: boolean
