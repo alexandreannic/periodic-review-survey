@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {ReactNode, useMemo, useState} from 'react'
-import {alpha, Box, styled, Tooltip} from '@mui/material'
+import {alpha, Box, styled, Tooltip, tooltipClasses, TooltipProps} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
 import {makeSx, Txt} from 'mui-extension'
 import {useI18n} from '../../core/i18n'
@@ -28,6 +28,48 @@ const sx = makeSx({
   },
 })
 
+const TooltipWrapper = ({
+  children,
+  item,
+  percentOfAll,
+  ...props
+}: {
+  percentOfAll: number
+  item: HorizontalBarChartGoogleData
+} & Omit<TooltipProps, 'title'>
+) => {
+  const {formatLargeNumber} = useI18n()
+  if (item.disabled) return children
+  return (
+    <LightTooltip
+      {...props}
+      open={item.disabled ? false : undefined}
+      title={
+        <>
+          <Txt size="big" block bold>
+            {item.label}
+          </Txt>
+          {item.desc && (
+            <Txt block color="hint">
+              {item.desc}
+            </Txt>
+          )}
+          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Txt size="title" color="primary" block>
+              {Math.ceil(percentOfAll)}%
+            </Txt>
+            <Txt size="title" color="hint" block>
+              {formatLargeNumber(item.value)}
+            </Txt>
+          </Box>
+        </>
+      }
+    >
+      {children}
+    </LightTooltip>
+  )
+}
+
 export const HorizontalBarChartGoogle = ({
   data,
   barHeight = 4
@@ -47,44 +89,22 @@ export const HorizontalBarChartGoogle = ({
           const percentOfMax = (item.value / maxValue) * 100
           const percentOfAll = (item.value / sumValue) * 100
           return (
-            <LightTooltip
-              open={item.disabled ? false : undefined}
-              title={
-                <>
-                  <Txt size="big" block bold>
-                    {item.label}
-                  </Txt>
-                  {item.desc && (
-                    <Txt block color="hint">
-                      {item.desc}
-                    </Txt>
-                  )}
-                  <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Txt size="title" color="primary" block>
-                      {Math.ceil(percentOfAll)}%
-                    </Txt>
-                    <Txt size="title" color="hint" block>
-                      {formatLargeNumber(item.value)}
-                    </Txt>
-                  </Box>
-                </>
-              }
-            >
-              <Box key={i} sx={{
+            <TooltipWrapper percentOfAll={percentOfAll} key={i} item={item}>
+              <Box sx={{
                 my: 1,
                 mx: 0,
                 ...item.disabled ? {
-                  mb: -2,
-                  mt: 3,
+                  mb: -1,
+                  mt: 2,
                 } : {
                   borderBottom: i === data.length - 1 ? 'none' : t => `1px solid ${t.palette.divider}`,
                   transition: t => t.transitions.create('background'),
                   '&:hover': {
-                    background: t => alpha(t.palette.primary.main, 0.1),
+                    background: t => alpha(item.color ?? t.palette.primary.main, 0.10),
                   }
                 }
               }}>
-                <Box sx={{display: 'flex', mb: barHeight + 'px', py: .5}}>
+                <Box sx={{display: 'flex', mb: barHeight + 'px', py: .0}}>
                   <Box sx={sx.label}>
                     {item.label}
                   </Box>
@@ -111,7 +131,7 @@ export const HorizontalBarChartGoogle = ({
                   style={{width: appeared ? `calc(${percentOfMax * 0.9}%)` : 0, color: item.color, borderColor: item.color}}
                 />
               </Box>
-            </LightTooltip>
+            </TooltipWrapper>
           )
         })
       ) : (
@@ -121,21 +141,13 @@ export const HorizontalBarChartGoogle = ({
   )
 }
 
-const ToBeStyledTooltip = ({className, ...props}: any) => (
-  <Tooltip {...props} classes={{tooltip: className}}/>
-)
-
-const LightTooltip = styled(ToBeStyledTooltip)(({theme}) => ({
-  backgroundColor: theme.palette.common.white,
-  color: 'rgba(0, 0, 0, 0.87)',
-  boxShadow: theme.shadows[1],
-  fontSize: 11,
+const LightTooltip = styled(({className, ...props}: TooltipProps) => (
+  <Tooltip {...props} classes={{popper: className}}/>
+))(({theme}) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
 }))
-
-
-// const LightTooltip = styled(Tooltip)((t: Theme) => ({
-//   backgroundColor: t.palette.common.white,
-//   color: 'rgba(0, 0, 0, 0.87)',
-//   boxShadow: t.shadows[1],
-//   fontSize: 11,
-// }))

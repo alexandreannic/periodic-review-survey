@@ -77,7 +77,7 @@ export const ScLineChart = memo(({sx, disableAnimation, hideLabelToggle, curves,
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="date" />
             <YAxis />
-            <Tooltip />
+            <Tooltip wrapperStyle={{zIndex: 100, borderRadius: 4}}/>
             {curves.map((_, i) => (
               <Line
                 isAnimationActive={!disableAnimation}

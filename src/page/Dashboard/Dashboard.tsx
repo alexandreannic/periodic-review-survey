@@ -31,7 +31,9 @@ export const Dashboard = () => {
   }, [])
 
   return (
-    <Layout width={968}>
+    <Layout width={968} sx={{
+      background: '#f8fafd',
+    }}>
       <Grid container spacing={spacing}>
         <Grid item md={4} sm={12} xs={12}>
           <AnimateList delay={300}>

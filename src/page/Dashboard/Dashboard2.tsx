@@ -1,7 +1,7 @@
-import {useEffect, useMemo, useState} from 'react'
+import {Fragment, useEffect, useMemo, useState} from 'react'
 import {AllBreakthroughOptions, FormAnswer} from '../Form/Form'
 import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
-import {Box, Checkbox, FormControlLabel, Grid} from '@mui/material'
+import {Box, Checkbox, Divider, FormControlLabel, Grid} from '@mui/material'
 import {Panel, PanelBody, PanelHead} from '../../shared/Panel'
 import {useI18n} from '../../core/i18n'
 import {Enum} from '@alexandreannic/ts-utils'
@@ -13,6 +13,7 @@ import {AnimateList} from 'mui-extension'
 import {ScRadioGroup, ScRadioGroupItem} from '../../shared/RadioGroup'
 import {ScLineChart} from '../../shared/Chart/Chart'
 import {allOutcomeOptions} from '../Form/formData'
+import {useSetState} from '@alexandreannic/react-hooks-lib'
 
 const spacing = 2
 
@@ -35,7 +36,7 @@ export const Dashboard2 = () => {
   const answers = useMemo(() => Object.values(answersIndex), [answersIndex])
   const {m} = useI18n()
   const [filterAreas, setFilterAreas] = useState<string[]>(Object.keys(m.areas))
-  const [filterOutcomes, setFilterOutcomes] = useState(Object.keys(allOutcomeOptions(m)))
+  const filterOutcomes = useSetState(Object.keys(allOutcomeOptions(m)))
   const filteredAnswers = useMemo(() =>
       answers.filter(_ => filterAreas.length === 0 ? true : filterAreas.includes(_.area ?? '')),
     [filterAreas, answers])
@@ -70,29 +71,39 @@ export const Dashboard2 = () => {
             </Panel>
             <Panel>
               <PanelBody>
-                {Enum.entries(m.formOutcome.breakthrough).map(([bt, bv], i) =>
-                  <>
-                    <Txt bold block sx={{mt: i > 0 ? 2 : 0}}>{bv.title}</Txt>
-                    {Enum.entries(m.formOutcome.breakthrough[bt].options as Record<AllBreakthroughOptions, {title: string, desc: string}>).map(([k, v]) =>
-                      <>
-                        <FormControlLabel
-                          sx={{display: 'block',}}
-                          label={v.title}
-                          control={
-                            <Checkbox
-                              size="small"
-                              sx={{'& svg': {fill: colors[k] + ' !important'}}}
-                              checked={filterOutcomes.includes(k)}
-                              onChange={e => {
-                                if (e.target.checked) setFilterOutcomes(_ => [..._, k])
-                                else setFilterOutcomes(_ => _.filter(o => o !== k))
-                              }}
-                            />
+                {Enum.entries(m.formOutcome.breakthrough).map(([bk, bv], i) =>
+                  <Fragment key={bk}>
+                    <FormControlLabel
+                      control={<Checkbox
+                        {...(() => {
+                          if (Enum.keys(m.formOutcome.breakthrough[bk].options).every(k => filterOutcomes.has(k))) {
+                            return {checked: true}
+                          } else if (Enum.keys(m.formOutcome.breakthrough[bk].options).find(k => filterOutcomes.has(k))) {
+                            return {indeterminate: true, checked: false}
                           }
-                        />
-                      </>
+                          return {checked: false}
+                        })()}
+                        onChange={e => filterOutcomes[e.target.checked ? 'add' : 'delete'](Enum.keys(m.formOutcome.breakthrough[bk].options) as any)}
+                      />}
+                      label={<Txt bold block>{bv.title}</Txt>}
+                    />
+                    {Enum.entries(m.formOutcome.breakthrough[bk].options as Record<AllBreakthroughOptions, {title: string, desc: string}>).map(([k, v]) =>
+                      <FormControlLabel
+                        key={k}
+                        sx={{display: 'block',}}
+                        label={v.title}
+                        control={
+                          <Checkbox
+                            size="small"
+                            sx={{'& svg': {fill: colors[k] + ' !important'}}}
+                            checked={filterOutcomes.has(k)}
+                            onChange={e => e.target.checked ? filterOutcomes.add(k) : filterOutcomes.delete(k)}
+                          />
+                        }
+                      />
                     )}
-                  </>
+                    {i === 0 && <Divider sx={{my: 1}}/>}
+                  </Fragment>
                 )}
               </PanelBody>
             </Panel>
@@ -115,19 +126,18 @@ export const Dashboard2 = () => {
         <Grid item sm={8} xs={12}>
           <Txt block bold sx={{fontSize: '1.6rem', mb: 1}}>{m.formOutcome.title.replace('...', ':')}</Txt>
           <AnimateList initialDelay={150} delay={250}>
-            <Panel>
+            <Panel sx={{overflow: 'visible'}}>
               <PanelBody sx={{pl: 0}}>
                 <ScLineChart
                   sx={{ml: -3, mr: -1}}
                   hideLabelToggle
-                  curves={Enum.entries(allOutcomeOptions(m)).filter(([k, v]) => filterOutcomes.includes(k)).map(([k, v]) => (
+                  curves={Enum.entries(allOutcomeOptions(m)).filter(([k, v]) => filterOutcomes.has(k)).map(([k, v]) => (
                     {
                       label: v.title,
                       key: k,
                       color: colors[k],
                       curve: (() => {
                         const x = Enum.keys(m.formOutcome.questions)
-                          // .filter(qk => filterOutcomes.includes(qk))
                           .map(qK => ({
                             date: qK,
                             count: filteredAnswers.reduce((acc, _) => acc + (_[qK]?.includes(k) ? 1 : 0), 0)
@@ -150,7 +160,7 @@ export const Dashboard2 = () => {
                           value: 0
                         },
                         ...Enum.entries(btv.options as Record<AllBreakthroughOptions, {title: string, desc: string}>)
-                          .filter(([k, v]) => filterOutcomes.includes(k))
+                          .filter(([k, v]) => filterOutcomes.has(k))
                           .map(([k, v]) => (
                             {
                               label: <Txt color="hint">{v.title}</Txt>,
