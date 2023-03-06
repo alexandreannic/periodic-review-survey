@@ -11,7 +11,7 @@ import {StoreProvider} from './core/context/StoreContext'
 import {ToastProvider} from 'mui-extension'
 import {FirebaseDb} from './core/firebaseDb/FirebaseDb'
 import {FirebaseDbProvider} from './core/firebaseDb/FirebaseDbContext'
-import {BrowserRouter} from 'react-router-dom'
+import {HashRouter} from 'react-router-dom'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -27,7 +27,7 @@ root.render(
     _ => <StoreProvider children={_}/>,
     _ => <ToastProvider children={_}/>,
     _ => <FirebaseDbProvider children={_} db={firebaseDb}/>,
-    _ => <BrowserRouter children={_}/>
+    _ => <HashRouter children={_}/>
   ]}>
     <App/>
   </Provide>
