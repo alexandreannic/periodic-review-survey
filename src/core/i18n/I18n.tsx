@@ -47,7 +47,7 @@ export const I18nProvider = ({
   const {messages: m, ...others}: typeof en = useMemo(() => {
     switch (lang) {
       case 'ua':
-        return en
+        return ua
       default:
         return en
     }

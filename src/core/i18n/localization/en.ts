@@ -2,34 +2,34 @@ import {formatDistance, formatDuration as formatDurationFns} from 'date-fns'
 
 const invalidDate = '-'
 
-const isDateValid = (d?: Date): boolean => {
+export const isDateValid = (d?: Date): boolean => {
   return !!d && d instanceof Date && !isNaN(d.getTime())
 }
 
-const formatDate = (d?: Date): string => {
+export const formatDate = (d?: Date): string => {
   if (!isDateValid(d)) return invalidDate
   return d!.toLocaleDateString()
 }
 
-const formatTime = (d?: Date): string => {
+export const formatTime = (d?: Date): string => {
   if (!isDateValid(d)) return invalidDate
   return d!.toLocaleTimeString()
 }
 
-const formatDateTime = (d?: Date): string => {
+export const formatDateTime = (d?: Date): string => {
   if (!isDateValid(d)) return invalidDate
   return formatDate(d) + ' ' + formatTime(d)
 }
 
-const dateFromNow = (d?: Date): string | undefined => {
+export const dateFromNow = (d?: Date): string | undefined => {
   return d ? formatDistance(d, new Date(), {addSuffix: true}) : undefined
 }
 
-const formatLargeNumber = (n?: number): string => {
+export const formatLargeNumber = (n?: number): string => {
   return n !== undefined && n !== null ? n.toLocaleString('fr-FR') : '-'
 }
 
-const formatDuration = formatDurationFns
+export const formatDuration = formatDurationFns
 
 export type Messages = typeof en['messages']
 
