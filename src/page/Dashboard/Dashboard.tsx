@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from 'react'
 import {AllBreakthroughOptions, FormAnswer} from '../Form/Form'
 import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
-import {Box, Checkbox, FormControlLabel, Grid} from '@mui/material'
+import {Box, Grid} from '@mui/material'
 import {Panel, PanelBody, PanelHead} from '../../shared/Panel'
 import {useI18n} from '../../core/i18n'
 import {Enum} from '@alexandreannic/ts-utils'
@@ -11,8 +11,6 @@ import {Layout} from '../../shared/Layout/Layout'
 import {HorizontalBarChartGoogle} from '../../shared/HorizontalBarChart/HorizontalBarChartGoogle'
 import {AnimateList} from 'mui-extension'
 import {ScRadioGroup, ScRadioGroupItem} from '../../shared/RadioGroup'
-import {ScLineChart} from '../../shared/Chart/Chart'
-import {allOutcomeOptions} from '../Form/formData'
 
 const spacing = 2
 

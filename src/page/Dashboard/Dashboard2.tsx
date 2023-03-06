@@ -47,23 +47,27 @@ export const Dashboard2 = () => {
   }, [])
   
   return (
-    <Layout width={968}>
+    <Layout width={968} sx={{
+      background: '#f8fafd',
+    }}>
       <Grid container spacing={spacing}>
-        <Grid item md={4} sm={12} xs={12}>
-          <AnimateList delay={300}>
+        <Grid item sm={4} xs={12}>
+          <Panel>
+            <PanelBody sx={{textAlign: 'center', display: 'flex', alignItems: 'flex-end'}}>
+              <Box sx={{fontSize: '2rem', mr: 1, lineHeight: 1,}}>
+                {filteredAnswers.length}
+              </Box>
+              <Txt size="big" color="hint">{m.answers}</Txt>
+            </PanelBody>
+          </Panel>
+          <AnimateList initialDelay={250} delay={150}>
             <Panel>
-              <PanelBody sx={{textAlign: 'center', display: 'flex', alignItems: 'flex-end'}}>
-                <Box sx={{fontSize: '2rem', mr: 1, lineHeight: 1,}}>
-                  {filteredAnswers.length}
-                </Box>
-                <Txt size="big" color="hint">{m.answers}</Txt>
-              </PanelBody>
+              <ScRadioGroup<string> multiple dense value={filterAreas} onChange={setFilterAreas} sx={{border: 'none'}}>
+                {Enum.entries(m.areas).map(([k, v]) => (
+                  <ScRadioGroupItem key={k} value={k} title={v}/>
+                ))}
+              </ScRadioGroup>
             </Panel>
-            <ScRadioGroup<string> multiple dense value={filterAreas} onChange={setFilterAreas} sx={{mb: 2}}>
-              {Enum.entries(m.areas).map(([k, v]) => (
-                <ScRadioGroupItem key={k} value={k} title={v}/>
-              ))}
-            </ScRadioGroup>
             <Panel>
               <PanelBody>
                 {Enum.entries(m.formOutcome.breakthrough).map(([bt, bv], i) =>
@@ -108,62 +112,60 @@ export const Dashboard2 = () => {
             </Panel>
           </AnimateList>
         </Grid>
-        <Grid item md={8} sm={12} xs={12}>
+        <Grid item sm={8} xs={12}>
           <Txt block bold sx={{fontSize: '1.6rem', mb: 1}}>{m.formOutcome.title.replace('...', ':')}</Txt>
-          <Panel>
-            <PanelBody sx={{pl: 0}}>
-              <ScLineChart
-                sx={{ml: -3, mr: -1}}
-                hideLabelToggle
-                curves={Enum.entries(allOutcomeOptions(m)).filter(([k, v]) => filterOutcomes.includes(k)).map(([k, v]) => (
-                  {
-                    label: v.title,
-                    key: k,
-                    color: colors[k],
-                    curve: (() => {
-                      const x = Enum.keys(m.formOutcome.questions)
-                        // .filter(qk => filterOutcomes.includes(qk))
-                        .map(qK => ({
-                          date: qK,
-                          count: filteredAnswers.reduce((acc, _) => acc + (_[qK]?.includes(k) ? 1 : 0), 0)
-                        }))
-                      return x
-                    })()
-                  }
-                ))}/>
-              {/*<ScLineChart curves={Enum.entries(allOutcomeOptions(m)).map(([k, v]) =>*/}
-              {/*  {}  */}
-              {/*)}*/}
-              {/*/>*/}
-            </PanelBody>
-          </Panel>
-          {Enum.entries(m.formOutcome.questions).map(([questionK, questionV]) =>
-            <Panel key={questionK}>
-              <PanelHead>{capitalize(questionV.replace('...', ''))}</PanelHead>
-              <PanelBody sx={{pt: 0}}>
-                <HorizontalBarChartGoogle
-                  data={Enum.entries(m.formOutcome.breakthrough).map(([btk, btv]) => [
-                      {
-                        label: <Txt bold size="big">{btv.title}</Txt>,
-                        disabled: true,
-                        value: 0
-                      },
-                      ...Enum.entries(btv.options as Record<AllBreakthroughOptions, {title: string, desc: string}>)
-                        .filter(([k, v]) => filterOutcomes.includes(k))
-                        .map(([k, v]) => (
-                          {
-                            label: <Txt color="hint">{v.title}</Txt>,
-                            value: filteredAnswers.reduce((acc, v) => acc + (v[questionK]?.includes(k) ? 1 : 0), 0),
-                            desc: v.desc,
-                            color: colors[k],
-                          }
-                        ))
-                    ]
-                  ).flatMap(_ => _)}
-                />
+          <AnimateList initialDelay={150} delay={250}>
+            <Panel>
+              <PanelBody sx={{pl: 0}}>
+                <ScLineChart
+                  sx={{ml: -3, mr: -1}}
+                  hideLabelToggle
+                  curves={Enum.entries(allOutcomeOptions(m)).filter(([k, v]) => filterOutcomes.includes(k)).map(([k, v]) => (
+                    {
+                      label: v.title,
+                      key: k,
+                      color: colors[k],
+                      curve: (() => {
+                        const x = Enum.keys(m.formOutcome.questions)
+                          // .filter(qk => filterOutcomes.includes(qk))
+                          .map(qK => ({
+                            date: qK,
+                            count: filteredAnswers.reduce((acc, _) => acc + (_[qK]?.includes(k) ? 1 : 0), 0)
+                          }))
+                        return x
+                      })()
+                    }
+                  ))}/>
               </PanelBody>
             </Panel>
-          )}
+            {Enum.entries(m.formOutcome.questions).map(([questionK, questionV]) =>
+              <Panel key={questionK}>
+                <PanelHead>{capitalize(questionV.replace('...', ''))}</PanelHead>
+                <PanelBody sx={{pt: 0}}>
+                  <HorizontalBarChartGoogle
+                    data={Enum.entries(m.formOutcome.breakthrough).map(([btk, btv]) => [
+                        {
+                          label: <Txt bold size="big">{btv.title}</Txt>,
+                          disabled: true,
+                          value: 0
+                        },
+                        ...Enum.entries(btv.options as Record<AllBreakthroughOptions, {title: string, desc: string}>)
+                          .filter(([k, v]) => filterOutcomes.includes(k))
+                          .map(([k, v]) => (
+                            {
+                              label: <Txt color="hint">{v.title}</Txt>,
+                              value: filteredAnswers.reduce((acc, v) => acc + (v[questionK]?.includes(k) ? 1 : 0), 0),
+                              desc: v.desc,
+                              color: colors[k],
+                            }
+                          ))
+                      ]
+                    ).flatMap(_ => _)}
+                  />
+                </PanelBody>
+              </Panel>
+            )}
+          </AnimateList>
         </Grid>
       </Grid>
     </Layout>

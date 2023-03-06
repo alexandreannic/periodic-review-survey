@@ -9,7 +9,7 @@ export interface PanelProps extends CardProps {
   elevation?: number
 }
 
-export const Panel = forwardRef(({elevation = 0, hoverable, loading, children, stretch, sx, ...other}: PanelProps, ref: any) => {
+export const Panel = forwardRef(({elevation = 1, hoverable, loading, children, stretch, sx, ...other}: PanelProps, ref: any) => {
   return (
     <Card
       ref={ref}
