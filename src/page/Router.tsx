@@ -3,6 +3,7 @@ import {Route, Routes} from 'react-router-dom'
 import React from 'react'
 import {useI18n} from '../core/i18n'
 import {Dashboard} from './Dashboard/Dashboard'
+import {Dashboard2} from './Dashboard/Dashboard2'
 
 
 export const Router = () => {
@@ -12,6 +13,7 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<Form/>}/>
         <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/dashboard2" element={<Dashboard2/>}/>
       </Routes>
     </div>
   )

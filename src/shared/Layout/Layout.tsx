@@ -51,7 +51,9 @@ export const Layout = ({
             <Txt block>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Txt>
             <NavLink to="/"><Txt link>Home</Txt></NavLink>
             &nbsp;•&nbsp;
-            <NavLink to="/dashboard"><Txt link>{m.seeResults}</Txt></NavLink>
+            <NavLink to="/dashboard"><Txt link>{m.seeResults} v1</Txt></NavLink>
+            &nbsp;•&nbsp;
+            <NavLink to="/dashboard2"><Txt link>{m.seeResults} v2</Txt></NavLink>
           </Grid>
           <Grid sm={6} item sx={{display: 'flex'}}>
             <ScRadioGroup onChange={setLang} value={currentLang} inline dense sx={{whiteSpace: 'nowrap', marginLeft: 'auto', color: t => t.palette.text.secondary}}>

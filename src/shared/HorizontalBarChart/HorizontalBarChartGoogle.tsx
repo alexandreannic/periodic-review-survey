@@ -10,6 +10,7 @@ export interface HorizontalBarChartGoogleData {
   value: number
   color?: string
   disabled?: boolean
+  desc?: string
 }
 
 interface Props {
@@ -53,14 +54,19 @@ export const HorizontalBarChartGoogle = ({
                   <Txt size="big" block bold>
                     {item.label}
                   </Txt>
-                  <div>
-                    <Txt size="title" color="primary" block>
-                      {formatLargeNumber(item.value)}
+                  {item.desc && (
+                    <Txt block color="hint">
+                      {item.desc}
                     </Txt>
-                    <Txt size="big" color="hint" block>
+                  )}
+                  <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Txt size="title" color="primary" block>
                       {Math.ceil(percentOfAll)}%
                     </Txt>
-                  </div>
+                    <Txt size="title" color="hint" block>
+                      {formatLargeNumber(item.value)}
+                    </Txt>
+                  </Box>
                 </>
               }
             >
