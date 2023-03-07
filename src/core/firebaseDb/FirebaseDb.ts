@@ -15,6 +15,7 @@ export class FirebaseDb {
   readonly db = fb.getDatabase(this.app)
 
   readonly save = async (answers: FormAnswer) => {
+    answers.savedAt = new Date().toISOString()
     await fb.push(fb.ref(this.db, 'answers'), answers)
   }
   
@@ -22,7 +23,6 @@ export class FirebaseDb {
     const ref = fb.ref(this.db, 'answers')
     fb.onValue(ref, (snapshot) => {
       const data = snapshot.val()
-      console.log(data, snapshot)
       cb(data ?? {})
     })
   }

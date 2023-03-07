@@ -149,8 +149,7 @@ export const Dashboard2 = () => {
               </PanelBody>
             </Panel>
             {Enum.entries(m.formOutcome.questions).map(([questionK, questionV]) =>
-              <Panel key={questionK}>
-                <PanelHead>{capitalize(questionV.replace('...', ''))}</PanelHead>
+              <Panel key={questionK} title={capitalize(questionV.replace('...', ''))} expendable>
                 <PanelBody sx={{pt: 0}}>
                   <HorizontalBarChartGoogle
                     data={Enum.entries(m.formOutcome.breakthrough).map(([btk, btv]) => [
@@ -163,7 +162,7 @@ export const Dashboard2 = () => {
                           .filter(([k, v]) => filterOutcomes.has(k))
                           .map(([k, v]) => (
                             {
-                              label: <Txt color="hint">{v.title}</Txt>,
+                              label: v.title,
                               value: filteredAnswers.reduce((acc, v) => acc + (v[questionK]?.includes(k) ? 1 : 0), 0),
                               desc: v.desc,
                               color: colors[k],

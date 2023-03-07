@@ -1,9 +1,9 @@
 import * as React from 'react'
 import {ReactNode, useMemo, useState} from 'react'
-import {alpha, Box, styled, Tooltip, tooltipClasses, TooltipProps} from '@mui/material'
+import {alpha, Box, Icon, styled, Tooltip, tooltipClasses, TooltipProps} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
-import {makeSx, Txt} from 'mui-extension'
 import {useI18n} from '../../core/i18n'
+import {Txt} from '../Txt/Txt'
 
 export interface HorizontalBarChartGoogleData {
   label: ReactNode
@@ -17,16 +17,6 @@ interface Props {
   data?: HorizontalBarChartGoogleData[]
   barHeight?: number
 }
-
-const sx = makeSx({
-  label: {
-    flex: 1,
-    p: 0,
-    pr: 2,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-})
 
 const TooltipWrapper = ({
   children,
@@ -105,9 +95,10 @@ export const HorizontalBarChartGoogle = ({
                 }
               }}>
                 <Box sx={{display: 'flex', mb: barHeight + 'px', py: .0}}>
-                  <Box sx={sx.label}>
-                    {item.label}
-                  </Box>
+                  <Txt sx={{p: 0, mt: .5, pr: 2, flex: 1}} truncate>
+                    <Txt block truncate>{item.label}</Txt>
+                    {item.desc && <Txt block color="hint" truncate size="small">{item.desc}</Txt>}
+                  </Txt>
                   {!item.disabled && (
                     <Box sx={{display: 'flex', textAlign: 'right',}}>
                       <Txt color="hint">{formatLargeNumber(item.value)}</Txt>
@@ -135,7 +126,14 @@ export const HorizontalBarChartGoogle = ({
           )
         })
       ) : (
-        <Box sx={sx.label}> {m.noDataAtm} </Box>
+        <Box sx={{
+          textAlign: 'center',
+          mt: 2,
+          color: t => t.palette.text.disabled
+        }}>
+          <Icon sx={{fontSize: '3rem !important'}}>block</Icon>
+          <Box>{m.noDataAtm}</Box>
+        </Box>
       )}
     </Box>
   )

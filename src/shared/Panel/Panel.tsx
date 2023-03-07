@@ -1,20 +1,44 @@
 import * as React from 'react'
-import {forwardRef} from 'react'
-import {Card, CardProps, LinearProgress} from '@mui/material'
+import {forwardRef, ReactNode, useState} from 'react'
+import {Box, Card, CardProps, Icon, LinearProgress} from '@mui/material'
+import {PanelHead} from './PanelHead'
+import {IconBtn} from 'mui-extension'
 
-export interface PanelProps extends CardProps {
+export interface PanelProps extends Omit<CardProps, 'title'> {
   loading?: boolean
   hoverable?: boolean
   stretch?: boolean
   elevation?: number
+  title?: ReactNode
+  expendable?: boolean
 }
 
-export const Panel = forwardRef(({elevation = 1, hoverable, loading, children, stretch, sx, ...other}: PanelProps, ref: any) => {
+export const Panel = forwardRef(({
+  elevation = 1,
+  hoverable,
+  loading,
+  children,
+  stretch,
+  sx,
+  title,
+  expendable,
+  ...other
+}: PanelProps, ref: any) => {
+  const [expended, setExpended] = useState(false)
   return (
     <Card
       ref={ref}
       elevation={elevation}
       sx={{
+        ...expended ? {
+          zIndex: 1,
+          position: 'fixed',
+          fontSize: 17,
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        } : {},
         borderRadius: t => t.shape.borderRadius + 'px',
         mb: 2,
         ...(hoverable && {
@@ -37,7 +61,19 @@ export const Panel = forwardRef(({elevation = 1, hoverable, loading, children, s
       }}
       {...other}
     >
-      {loading && <LinearProgress sx={{mb: '-4px'}} />}
+      {(title || expendable) && (
+        <PanelHead>
+          <Box sx={{display: 'flex', alignItems: 'center'}}>
+            {title}
+            {expendable && (
+              <IconBtn size="small" sx={{marginLeft: 'auto', color: t => t.palette.text.disabled}} onClick={() => setExpended(_ => !_)}>
+                <Icon>{expended ? 'fullscreen_exit' : 'fullscreen'}</Icon>
+              </IconBtn>
+            )}
+          </Box>
+        </PanelHead>
+      )}
+      {loading && <LinearProgress sx={{mb: '-4px'}}/>}
       {children}
     </Card>
   )

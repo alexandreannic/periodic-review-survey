@@ -39,13 +39,13 @@ export const Txt = forwardRef(({
         lineHeight: '1.5',
         ...size && ({
           title: {
-            fontSize: '1.30rem',
+            fontSize: '1.30em',
           },
           big: {
-            fontSize: '1.10rem',
+            fontSize: '1.10em',
           },
           small: {
-            fontSize: '0.90rem',
+            fontSize: '0.90em',
           },
         })[size],
         ...color && ({

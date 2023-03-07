@@ -48,7 +48,6 @@ export const Stepper = React.memo(({
     scrollTop()
   }
   const next = () => {
-    console.log(currentStep, steps.length)
     if (isDone) return
     setCurrentStep(_ => Math.min(_ + 1, maxStep))
     scrollTop()

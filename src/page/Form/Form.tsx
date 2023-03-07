@@ -15,6 +15,7 @@ import {Layout} from '../../shared/Layout/Layout'
 export type AllBreakthroughOptions = keyof Messages['formOutcome']['breakthrough']['breakthrough2']['options'] | keyof Messages['formOutcome']['breakthrough']['breakthrough1']['options']
 
 export interface FormAnswer {
+  savedAt?: string
   area?: Area
   now?: AllBreakthroughOptions[]
   oneYear?: AllBreakthroughOptions[]

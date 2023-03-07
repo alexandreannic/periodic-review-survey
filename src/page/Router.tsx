@@ -12,8 +12,8 @@ export const Router = () => {
     <div>
       <Routes>
         <Route path="/" element={<Form/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/dashboard2" element={<Dashboard2/>}/>
+        <Route path="/dashboard2" element={<Dashboard/>}/>
+        <Route path="/dashboard" element={<Dashboard2/>}/>
       </Routes>
     </div>
   )
