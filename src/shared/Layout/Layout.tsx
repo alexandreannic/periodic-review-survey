@@ -1,4 +1,4 @@
-import {Box, BoxProps, Grid} from '@mui/material'
+import {Box, BoxProps, Grid, Icon} from '@mui/material'
 import {Txt} from 'mui-extension'
 import {NavLink} from 'react-router-dom'
 import {ScRadioGroup, ScRadioGroupItem} from '../RadioGroup'
@@ -57,7 +57,7 @@ export const Layout = ({
           <Grid container alignItems="center" justifyContent={'space-between'}>
             <Grid sm={6} item sx={{my: 1}}>
               <Txt block>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Txt>
-              <NavLink to="/"><Txt link>Home</Txt></NavLink>
+              <NavLink to="/"><Txt link>{m.home}</Txt></NavLink>
               &nbsp;•&nbsp;
               <NavLink to="/dashboard"><Txt link>{m.seeResults}</Txt></NavLink>
             </Grid>

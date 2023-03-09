@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {ReactNode, useMemo, useState} from 'react'
+import {ReactNode, useEffect, useMemo, useState} from 'react'
 import {alpha, Box, Icon, styled, Tooltip, tooltipClasses, TooltipProps} from '@mui/material'
 import {useTimeout} from '@alexandreannic/react-hooks-lib'
 import {useI18n} from '../../core/i18n'
@@ -14,19 +14,36 @@ export interface HorizontalBarChartGoogleData {
 }
 
 interface Props {
+  base?: number
   data?: HorizontalBarChartGoogleData[]
   barHeight?: number
 }
 
-const TooltipWrapper = ({
-  children,
-  item,
-  percentOfAll,
-  ...props
+const TooltipRow = ({
+  label,
+  value,
 }: {
-  percentOfAll: number
-  item: HorizontalBarChartGoogleData
-} & Omit<TooltipProps, 'title'>
+  label: ReactNode
+  value: ReactNode
+}) => {
+  return (
+    <Txt size="title" sx={{mt: .5, display: 'flex', justifyContent: 'space-between'}}>
+      <Txt color="hint">{label}</Txt>
+      <Txt bold color="primary">{value}</Txt>
+    </Txt>
+  )
+}
+const TooltipWrapper = ({
+    children,
+    item,
+    percentOfAll,
+    percentOfBase,
+    ...props
+  }: {
+    percentOfBase: number
+    percentOfAll: number
+    item: HorizontalBarChartGoogleData
+  } & Omit<TooltipProps, 'title'>
 ) => {
   const {formatLargeNumber} = useI18n()
   if (item.disabled) return children
@@ -44,13 +61,12 @@ const TooltipWrapper = ({
               {item.desc}
             </Txt>
           )}
-          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-            <Txt size="title" color="primary" block>
-              {Math.ceil(percentOfAll)}%
-            </Txt>
-            <Txt size="title" color="hint" block>
-              {formatLargeNumber(item.value)}
-            </Txt>
+          <Box sx={{mt: .5}}>
+            <TooltipRow label="Total" value={formatLargeNumber(item.value)}/>
+            <TooltipRow label="% of answers" value={Math.ceil(percentOfAll) + ' %'}/>
+            {percentOfAll !== percentOfBase && (
+              <TooltipRow label="% of peoples" value={Math.ceil(percentOfBase) + ' %'}/>
+            )}
           </Box>
         </>
       }
@@ -62,14 +78,16 @@ const TooltipWrapper = ({
 
 export const HorizontalBarChartGoogle = ({
   data,
+  base,
   barHeight = 4
 }: Props) => {
   const {m} = useI18n()
+
   const maxValue = useMemo(() => data && Math.max(...data.map(_ => _.value)), [data])
   const sumValue = useMemo(() => data && data.reduce((sum, _) => _.value + sum, 0), [data])
   const [appeared, setAppeared] = useState<boolean>(false)
   const {formatLargeNumber} = useI18n()
-  
+
   useTimeout(() => setAppeared(true), 200)
 
   return (
@@ -77,9 +95,10 @@ export const HorizontalBarChartGoogle = ({
       {data && maxValue && sumValue ? (
         data.map((item, i) => {
           const percentOfMax = (item.value / maxValue) * 100
+          const percentOfBase = (item.value / (base ?? sumValue)) * 100
           const percentOfAll = (item.value / sumValue) * 100
           return (
-            <TooltipWrapper percentOfAll={percentOfAll} key={i} item={item}>
+            <TooltipWrapper percentOfBase={percentOfBase} percentOfAll={percentOfAll} key={i} item={item}>
               <Box sx={{
                 my: 1,
                 mx: 0,
@@ -106,7 +125,7 @@ export const HorizontalBarChartGoogle = ({
                         minWidth: 110,
                         color: t => t.palette.primary.main,
                         fontWeight: t => t.typography.fontWeightBold,
-                      }}>{percentOfMax.toFixed(1)}%</Box>
+                      }}>{percentOfBase.toFixed(1)}%</Box>
                     </Box>
                   )}
                 </Box>

@@ -16,6 +16,7 @@ export const ua = {
     somethingWentWrong: 'Щось пішло не так',
     yes: 'Так',
     no: 'Ні',
+    home: 'додому',
     previous: 'Попередній',
     next: 'Наступний',
     yourAnswers: 'Ваші відповіді',

@@ -73,6 +73,7 @@ export const Dashboard = () => {
               <PanelHead>{capitalize(questionV.replace('...', ''))}</PanelHead>
               <PanelBody sx={{pt: 0}}>
                 <HorizontalBarChartGoogle
+                  base={filteredAnswers.length}
                   data={Enum.entries(m.formOutcome.breakthrough).map(([btk, btv]) => [
                       {
                         label: <Txt bold size="big">{btv.title}</Txt>,

@@ -18,16 +18,27 @@ import {useSetState} from '@alexandreannic/react-hooks-lib'
 const spacing = 2
 
 const colors = {
-  bt1_outcomeArea1: '#f44336',
-  bt1_outcomeArea2: '#9c27b0',
-  bt1_outcomeArea3: '#3f51b5',
-  bt1_outcomeArea4: '#03a9f4',
-  bt1_outcomeArea5: '#2e8c32',
-  bt2_outcomeArea5: '#ffc107',
-  bt2_outcomeArea6: '#6cf61b',
-  bt2_outcomeArea7: '#000000',
-  bt2_outcomeArea8: '#00e5ff',
-  bt2_outcomeArea9: '#834bff',
+  // bt1_outcomeArea1: '#f44336',
+  // bt1_outcomeArea2: '#9c27b0',
+  // bt1_outcomeArea3: '#3f51b5',
+  // bt1_outcomeArea4: '#03a9f4',
+  // bt1_outcomeArea5: '#2e8c32',
+  // bt2_outcomeArea5: '#ffc107',
+  // bt2_outcomeArea6: '#6cf61b',
+  // bt2_outcomeArea7: '#000000',
+  // bt2_outcomeArea8: '#00e5ff',
+  // bt2_outcomeArea9: '#834bff',
+  //
+  bt1_outcomeArea1: '#FF4136',
+  bt1_outcomeArea2: '#FF851B',
+  bt1_outcomeArea3: '#FFDC00',
+  bt1_outcomeArea4: '#3D9970',
+  bt1_outcomeArea5: '#0074D9',
+  bt2_outcomeArea5: '#B10DC9',
+  bt2_outcomeArea6: '#FF0066',
+  bt2_outcomeArea7: '#F012BE',
+  bt2_outcomeArea8: '#FF6F61',
+  bt2_outcomeArea9: '#7FDBFF',
 }
 
 export const Dashboard2 = () => {
@@ -113,6 +124,7 @@ export const Dashboard2 = () => {
               </PanelHead>
               <PanelBody>
                 <HorizontalBarChartGoogle
+                  base={filteredAnswers.length}
                   data={Enum.entries(m.areas)
                     .filter(([k, v]) => filterAreas.length === 0 ? true : filterAreas.includes(k))
                     .map(([k, v]) => (
@@ -152,6 +164,7 @@ export const Dashboard2 = () => {
               <Panel key={questionK} title={capitalize(questionV.replace('...', ''))} expendable>
                 <PanelBody sx={{pt: 0}}>
                   <HorizontalBarChartGoogle
+                    base={filteredAnswers.length}
                     data={Enum.entries(m.formOutcome.breakthrough).map(([btk, btv]) => [
                         {
                           label: <Txt bold size="big">{btv.title}</Txt>,

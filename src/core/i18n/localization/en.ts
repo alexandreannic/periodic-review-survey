@@ -49,6 +49,7 @@ export const en = Object.freeze({
     somethingWentWrong: 'Something went wrong',
     yes: 'Yes',
     no: 'No',
+    home: 'Home',
     previous: 'Previous',
     next: 'Next',
     yourAnswers: 'You answers',
