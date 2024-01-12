@@ -1,6 +1,5 @@
 import {Form} from './Form/Form'
 import {Route, Routes} from 'react-router-dom'
-import React from 'react'
 import {useI18n} from '../core/i18n'
 import {Dashboard} from './Dashboard/Dashboard'
 import {Dashboard2} from './Dashboard/Dashboard2'

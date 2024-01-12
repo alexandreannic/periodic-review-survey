@@ -1,5 +1,4 @@
 import {Box, BoxProps, Skeleton, Theme} from '@mui/material'
-import * as React from 'react'
 import {forwardRef} from 'react'
 
 interface Props extends BoxProps {
