@@ -88,6 +88,14 @@ export const en = Object.freeze({
       }
     },
     questionArea: 'In which area are you working ?',
+    offices: {
+      kharkiv: 'Kharkiv',
+      dnipro: 'Dnipro',
+      chernihiv: 'Chernihiv',
+      sumy: 'Sumy',
+      mykolaiv: 'Mykolaiv',
+      lviv: 'Lviv',
+    },
     areas: {
       north: 'North',
       east: 'East',

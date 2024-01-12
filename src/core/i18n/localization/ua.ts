@@ -55,6 +55,14 @@ export const ua = {
       }
     },
     questionArea: 'У якій області ви працюєте?',
+    offices: {
+      kharkiv: 'Kharkiv',
+      dnipro: 'Dnipro',
+      chernihiv: 'Chernihiv',
+      sumy: 'Sumy',
+      mykolaiv: 'Mykolaiv',
+      lviv: 'Lviv',
+    },
     areas: {
       north: 'Північ',
       east: 'Схід',

@@ -4,22 +4,29 @@ import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
 import {Box, Grid} from '@mui/material'
 import {Panel, PanelBody, PanelHead} from '../../shared/Panel'
 import {useI18n} from '../../core/i18n'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Enum, seq} from '@alexandreannic/ts-utils'
 import {Txt} from '../../shared/Txt/Txt'
 import {capitalize} from '../../utils/Utils'
 import {Layout} from '../../shared/Layout/Layout'
 import {HorizontalBarChartGoogle} from '../../shared/HorizontalBarChart/HorizontalBarChartGoogle'
 import {AnimateList} from 'mui-extension'
 import {ScRadioGroup, ScRadioGroupItem} from '../../shared/RadioGroup'
+import {format} from 'date-fns'
 
 const spacing = 2
 
 export const Dashboard = () => {
   const [answersIndex, setAnswersIndex] = useState<Record<string, FormAnswer>>({})
   const db = useFirebaseDbContext()
-  const answers = useMemo(() => Object.values(answersIndex), [answersIndex])
+  const answers = useMemo(() => seq(Object.values(answersIndex)), [answersIndex])
   const {m} = useI18n()
   const [filterAreas, setFilterAreas] = useState<string[]>(Object.keys(m.areas))
+
+  const years = useMemo(() => {
+    return answers.compactBy('savedAt').map(_ => format(_.savedAt, 'yyyy')).distinct(_ => _)
+  }, [answers])
+
+  console.log(years)
   const filteredAnswers = useMemo(() =>
       answers.filter(_ => filterAreas.length === 0 ? true : filterAreas.includes(_.area ?? '')),
     [filterAreas, answers])
@@ -45,6 +52,11 @@ export const Dashboard = () => {
                 <Txt size="big" color="hint">{m.answers}</Txt>
               </PanelBody>
             </Panel>
+            <ScRadioGroup<string> multiple dense value={filterAreas} onChange={setFilterAreas} sx={{mb: 2}}>
+              {years.map(y => (
+                <ScRadioGroupItem key={y} value={y} title={y}/>
+              ))}
+            </ScRadioGroup>
             <ScRadioGroup<string> multiple dense value={filterAreas} onChange={setFilterAreas} sx={{mb: 2}}>
               {Enum.entries(m.areas).map(([k, v]) => (
                 <ScRadioGroupItem key={k} value={k} title={v}/>

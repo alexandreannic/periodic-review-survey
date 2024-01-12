@@ -26,7 +26,7 @@ export const QuestionArea = ({
           onChange(_)
           setTimeout(_stepper.next, 150)
         }}>
-          {Enum.entries(m.areas).map(([k, v]) =>
+          {Enum.entries(m.offices).map(([k, v]) =>
             <ScRadioGroupItem key={k} value={k} title={v}/>
           )}
         </ScRadioGroup>
