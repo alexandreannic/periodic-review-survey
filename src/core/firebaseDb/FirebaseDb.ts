@@ -2,7 +2,7 @@ import {AppConfig} from '../../conf/AppConfig'
 import {initializeApp} from 'firebase/app'
 import * as fb from 'firebase/database'
 import {FormAnswer} from '../../page/Form/Form'
-import {Enum} from '@alexandreannic/ts-utils'
+import {Enum, fnSwitch} from '@alexandreannic/ts-utils'
 
 export class FirebaseDb {
   constructor(
@@ -24,8 +24,22 @@ export class FirebaseDb {
     const ref = fb.ref(this.db, 'answers')
     fb.onValue(ref, (snapshot) => {
       const data: Record<string, FormAnswer> = snapshot.val()
-      new Enum(data).transform((k, v) => [k, {...v, savedAt: new Date(v.savedAt as any)}])
-      cb(data ?? {})
+      const mapped = new Enum(data)
+        .transform((k, v) => {
+          const m: FormAnswer = {
+            ...v,
+            office: v.office ?? fnSwitch(v.area!, {
+              south: 'mykolaiv',
+              east: 'dnipro',
+              west: 'lviv',
+              north: 'chernihiv',
+            }),
+            savedAt: new Date(v.savedAt as any)
+          }
+          return [k, m]
+        })
+        .get()
+      cb(mapped ?? {})
     })
   }
 }

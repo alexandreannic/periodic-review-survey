@@ -17,7 +17,7 @@ const StoreContext = React.createContext<StoreContextProps>({} as any)
 
 export const StoreProvider = ({children}: {children: ReactNode}) => {
   // const [store, setStore] = useState<Store>({submitted: false, answers: {}})
-  const [store, setStore] = usePersistentState<Store>({submitted: false, answers: {}}, 'store')
+  const [store, setStore] = usePersistentState<Store>({submitted: false, answers: {}}, {storageKey: 'store'})
   
   const set = (_: Partial<Store>) => {
     setStore(prev => ({

@@ -1,8 +1,8 @@
 import React from 'react'
 import {alpha, Box, BoxProps, SxProps, Theme} from '@mui/material'
-import {useWindowWidth} from 'core/useWindowWidth'
-import {makeSx, styleUtils} from 'core/theme'
 import {fnSwitch} from '@alexandreannic/ts-utils'
+import {useWindowWidth} from '../../core/useWindowWidth'
+import {makeSx, styleUtils} from '../../core/theme'
 
 interface StepperHeaderProps extends BoxProps {
   steps: (string | undefined)[]

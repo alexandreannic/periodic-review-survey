@@ -21,7 +21,14 @@ export const ua = {
     next: 'Наступний',
     yourAnswers: 'Ваші відповіді',
     confirm: 'Підтвердити',
+    viewMore: `Дивитись більше`,
+    viewLess: `Переглянути менше`,
+    viewNMore: (n: number) => `Дивитись ${n} більше`,
+    viewNLess: (n: number) => `Переглянути ${n} менше`,
     formSubmitted: 'Відповіді успішно відправлені',
+    formDetails: {
+      title: `Яка одна точка дії або вид діяльності дозволить нам працювати над обраним вами результатом/s?`,
+    },
     formOutcome: {
       title: 'Які 3 результати ...',
       questions: {

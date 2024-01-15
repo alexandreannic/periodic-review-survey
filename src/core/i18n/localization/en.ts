@@ -54,7 +54,14 @@ export const en = Object.freeze({
     next: 'Next',
     yourAnswers: 'You answers',
     confirm: 'Confirm',
+    viewMore: `View more`,
+    viewLess: `View less`,
+    viewNMore: (n: number) => `View ${n} more`,
+    viewNLess: (n: number) => `View ${n} less`,
     formSubmitted: 'Answers successfully submitted',
+    formDetails: {
+      title: `What is one action point or activity that will allow us to work toward your chosen outcome/s?`,
+    },
     formOutcome: {
       title: 'What are the 3 outcomes that...',
       questions: {

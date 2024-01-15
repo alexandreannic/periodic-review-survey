@@ -79,7 +79,7 @@ const TooltipWrapper = ({
 export const HorizontalBarChartGoogle = ({
   data,
   base,
-  barHeight = 4
+  barHeight = 3
 }: Props) => {
   const {m} = useI18n()
 

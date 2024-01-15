@@ -1,4 +1,4 @@
-import {Area} from './formData'
+import {Area, Office} from './formData'
 import {QuestionOutcome} from './QuestionOutcome'
 import {Stepper} from '../../shared/Stepper/Stepper'
 import {QuestionArea} from './QuestionArea'
@@ -11,12 +11,18 @@ import {useEffectFn} from '@alexandreannic/react-hooks-lib'
 import {Enum} from '@alexandreannic/ts-utils'
 import {Messages} from '../../core/i18n/localization/en'
 import {Layout} from '../../shared/Layout/Layout'
+import {QuestionDetails} from './QuestionDetails'
 
-export type AllBreakthroughOptions = keyof Messages['formOutcome']['breakthrough']['breakthrough2']['options'] | keyof Messages['formOutcome']['breakthrough']['breakthrough1']['options']
+export type AllBreakthroughOptions =
+  keyof Messages['formOutcome']['breakthrough']['breakthrough2']['options']
+  | keyof Messages['formOutcome']['breakthrough']['breakthrough1']['options']
 
 export interface FormAnswer {
   savedAt?: Date
+  /**@deprecated since 2024*/
   area?: Area
+  office?: Office
+  details?: string
   now?: AllBreakthroughOptions[]
   oneYear?: AllBreakthroughOptions[]
   end?: AllBreakthroughOptions[]
@@ -28,7 +34,7 @@ export const Form = () => {
   const {m} = useI18n()
   const {toastSuccess, toastError} = useToast()
 
-  useEffectFn(_db.save.error, _ => {
+  useEffectFn(_db.save.getError(), _ => {
     console.error(_)
     toastError(m.somethingWentWrong)
   })
@@ -52,8 +58,8 @@ export const Form = () => {
             name: 'area',
             component: () => (
               <QuestionArea
-                value={_store.get.answers.area}
-                onChange={_ => _store.set({answers: {area: _}})}
+                value={_store.get.answers.office}
+                onChange={_ => _store.set({answers: {office: _}})}
               />
             )
           },
@@ -66,7 +72,16 @@ export const Form = () => {
                 value={_store.get.answers[k]}
                 onChange={_ => _store.set({answers: {[k]: _}})}
               />
-          }))
+          })),
+          {
+            name: 'details',
+            component: () => (
+              <QuestionDetails
+                value={_store.get.answers.details}
+                onChange={_ => _store.set({answers: {details: _}})}
+              />
+            )
+          },
         ]}
       />
     </Layout>

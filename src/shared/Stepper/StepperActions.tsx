@@ -1,8 +1,8 @@
 import {Box} from '@mui/material'
-import {useI18n} from 'core/i18n'
 import {Btn} from '../Btn/Btn'
 import {useStepperContext} from './Stepper'
 import {StepperActionsNext} from './StepperActionsNext'
+import {useI18n} from '../../core/i18n'
 
 interface Props {
   hideNext?: boolean

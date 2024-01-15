@@ -9,6 +9,8 @@ import {useStoreContext} from '../../core/context/StoreContext'
 import {useFirebaseDbContext} from '../../core/firebaseDb/FirebaseDbContext'
 import {Enum} from '@alexandreannic/ts-utils'
 import {allOutcomeOptions} from './formData'
+import React, {ReactNode} from 'react'
+import {Messages} from '../../core/i18n/localization/en'
 
 interface Answer {
   title: string
@@ -17,10 +19,12 @@ interface Answer {
 
 const Question = ({
   question,
-  answer
+  answer,
+  children,
 }: {
   question: string
-  answer: Answer | Answer[]
+  answer?: Answer | Answer[]
+  children?: ReactNode
 }) => {
   return (
     <Box sx={{
@@ -32,16 +36,23 @@ const Question = ({
     }}>
       <Txt block size="big" bold>{question}</Txt>
       <Txt color="secondary">
-        <ul>
-          {[answer].flatMap(_ => _).map((_, i) =>
-            <Box component="li" sx={{mb: 1}} key={i}>
-              <Txt bold block>{_.title}</Txt>
-              {_.desc && (
-                <Txt color="hint">{_.desc}</Txt>
-              )}
-            </Box>
-          )}
-        </ul>
+        {children && (
+          <Box sx={{ml: 5, mt: 1}}>
+            {children}
+          </Box>
+        )}
+        {answer && (
+          <ul>
+            {[answer].flatMap(_ => _).map((_, i) =>
+              <Box component="li" sx={{mb: 1}} key={i}>
+                <Txt bold block dangerouslySetInnerHTML={{__html: _.title}}/>
+                {_.desc && (
+                  <Txt color="hint">{_.desc}</Txt>
+                )}
+              </Box>
+            )}
+          </ul>
+        )}
       </Txt>
     </Box>
   )
@@ -58,9 +69,9 @@ export const FormCompleted = ({
   const _db = useFirebaseDbContext()
   const _store = useStoreContext()
   const {m} = useI18n()
-  
+
   const {
-    area,
+    office,
     ...other
   } = formAnswers
   return (
@@ -73,18 +84,23 @@ export const FormCompleted = ({
         )}
         <QuestionTitle>{m.yourAnswers}</QuestionTitle>
         <div>
-          <Question question={m.questionArea} answer={{title: area!}}/>
+          <Question question={m.questionArea} answer={{title: m.offices[office!]}}/>
           <Txt size="big" bold>{m.formOutcome.title}</Txt>
-          {Enum.entries(m.formOutcome.questions).map(([k, v]) =>
+          {Enum.entries(m.formOutcome.questions as Messages['formOutcome']['questions']).map(([k, v]) =>
             <Question
               key={k}
               question={v}
               answer={other[k]?.map(_ => allOutcomeOptions(m)[_]) ?? []}
             />
           )}
+          <Question question={m.formDetails.title}>
+            <Box sx={{whiteSpace: 'pre-wrap'}}>
+              {other.details ?? ''}
+            </Box>
+          </Question>
         </div>
         <StepperActions
-          loadingNext={_db.save.loading}
+          loadingNext={_db.save.getLoading()}
           disableNext={_store.get.submitted}
           nextButtonLabel={m.confirm}
           next={onConfirm}

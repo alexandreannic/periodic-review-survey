@@ -56,7 +56,7 @@ export const Layout = ({
         }}>
           <Grid container alignItems="center" justifyContent={'space-between'}>
             <Grid sm={6} item sx={{my: 1}}>
-              <Txt block>© 2023&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Txt>
+              <Txt block>© 2024&nbsp;<b>DRC</b>&nbsp;Danish Refugee Council</Txt>
               <NavLink to="/"><Txt link>{m.home}</Txt></NavLink>
               &nbsp;•&nbsp;
               <NavLink to="/dashboard"><Txt link>{m.seeResults}</Txt></NavLink>

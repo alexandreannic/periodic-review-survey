@@ -3,12 +3,12 @@ import {Txt} from '../../shared/Txt/Txt'
 import {ScRadioGroup, ScRadioGroupItem} from '../../shared/RadioGroup'
 import {StepperActions} from '../../shared/Stepper/StepperActions'
 import {QuestionTitle} from './QuestionTitle'
-import {Animate} from 'shared/Animate'
 import {useStoreContext} from '../../core/context/StoreContext'
 import {useToast} from 'mui-extension'
 import {useI18n} from '../../core/i18n'
 import {useStepperContext} from '../../shared/Stepper/Stepper'
 import {Enum} from '@alexandreannic/ts-utils'
+import {Animate} from '../../shared/Animate'
 
 export const QuestionOutcome = ({
   label,
@@ -23,7 +23,6 @@ export const QuestionOutcome = ({
   const _store = useStoreContext()
   const _stepper = useStepperContext()
   const {toastWarning} = useToast()
-  const z = Enum.entries(m.formOutcome.breakthrough.breakthrough1.options).map(([a, b]) => a)
   return (
     <Animate>
       <div>

@@ -1,6 +1,7 @@
 import {Messages} from '../../core/i18n/localization/en'
 
 export type Area = keyof Messages['areas']
+export type Office = keyof Messages['offices']
 
 export const allOutcomeOptions = (m: Messages) => ({
   ...m.formOutcome.breakthrough.breakthrough1.options,
